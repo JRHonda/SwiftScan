@@ -1,6 +1,7 @@
-public struct SwiftScan {
-    public private(set) var text = "Hello, World!"
+/// !!! Everything below here will belong in SPM !!! ///
 
-    public init() {
-    }
-}
+import SwiftUI
+import AVFoundation
+import CoreHaptics
+import UIKit
+import Vision
