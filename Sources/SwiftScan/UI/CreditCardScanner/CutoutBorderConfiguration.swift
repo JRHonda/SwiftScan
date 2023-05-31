@@ -9,17 +9,19 @@ import SwiftUI
 
 /// Styles a `RoundedRectangle`
 public struct CutoutBorderConfiguration {
-    public var cornerRadius: CGFloat
-    public var style: RoundedCornerStyle
+    public var cornerRadius: CGFloat = 0
+    public var sharpCornerLength: CGFloat = 20
+    public var style: RoundedCornerStyle = .continuous
     public var color: Color
-    public var lineWidth: CGFloat
-    public var cornerDecoration: CornerDecoration
+    public var lineWidth: CGFloat = 4
+    public var cornerDecoration: CornerDecoration = .noDecoration
+    public var cornerDecorationColor: Color = .clear
     
     public static var roundedWhite: Self {
-        .init(cornerRadius: 10, style: .continuous, color: .white, lineWidth: 4, cornerDecoration: .rounded)
+        .init(cornerRadius: 10, color: .white)
     }
     
     public static var sharpWhite: Self {
-        .init(cornerRadius: 0, style: .continuous, color: .white, lineWidth: 4, cornerDecoration: .rounded)
+        .init(style: .continuous, color: .white)
     }
 }

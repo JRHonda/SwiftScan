@@ -10,20 +10,22 @@ import Vision
 
 public struct CreditCardScanner<Content: View>: View {
     @Binding var creditCardNumber: String
+    @Binding var confidence: VNConfidence
     let verticalPlacement: VerticalPlacement
     let cutoutConfiguation: CutoutBorderConfiguration
     let surroundingView: () -> Content
     
-    @State private var confidence = VNConfidence.zero
     @State private var cutoutBorderColor: Color
     
     public init(
         number: Binding<String>,
+        confidence: Binding<VNConfidence> = .constant(.zero),
         verticalPlacement: VerticalPlacement = .center,
         cutoutConfiguration: CutoutBorderConfiguration = .roundedWhite,
         surroundingView: @escaping () -> Content = { Color.white.opacity(0.5) }
     ) {
         self._creditCardNumber = number
+        self._confidence = confidence
         self.verticalPlacement = verticalPlacement
         self.cutoutConfiguation = cutoutConfiguration
         self.surroundingView = surroundingView
@@ -49,10 +51,10 @@ public struct CreditCardScanner<Content: View>: View {
                             .frame(width: size.width, height: size.height)
                             .position(position)
                             .if(cutoutConfiguation.cornerDecoration == .sharp) {
-                                $0.modifier(AddSharpCornersOnlyModifier(length: 20, color: .pink, lineWidth: 2, size: size, position: position))
+                                $0.modifier(AddSharpCornersOnlyModifier(length: cutoutConfiguation.sharpCornerLength, color: cutoutConfiguation.cornerDecorationColor, lineWidth: cutoutConfiguation.lineWidth + 0.5, size: size, position: position))
                             }
                             .if(cutoutConfiguation.cornerDecoration == .rounded) {
-                                $0.modifier(AddRoundedCornersOnlyModifier(cornerRadius: 10, color: .pink, lineWidth: 2, size: size, position: position))
+                                $0.modifier(AddRoundedCornersOnlyModifier(cornerRadius: cutoutConfiguation.cornerRadius, color: cutoutConfiguation.cornerDecorationColor, lineWidth: cutoutConfiguation.lineWidth + 0.5, size: size, position: position))
                             }
                     }
                     .onChange(of: confidence) { updatedConfidence in
