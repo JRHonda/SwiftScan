@@ -61,7 +61,7 @@ struct CreditCardCaptureControllerRepresentable: UIViewControllerRepresentable {
                 let cutoutYCenter = screenBounds.height * parent.verticalPlacement.value
                 
                 let cutoutWidth = screenWidth * 0.8
-                let cutoutHeight = cutoutWidth / 1.586
+                let cutoutHeight = cutoutWidth / 1.586 // ISO/IEC 7810 credit card aspect ratio
                 let originY = (cutoutYCenter - (cutoutHeight / 2)) / screenHeight
                 let hPadding = 0.16
                 
@@ -88,18 +88,21 @@ struct CreditCardCaptureControllerRepresentable: UIViewControllerRepresentable {
                 guard let candidate = visionResult.topCandidates(maxiumumCandidates).first else { continue }
                 
                 let digitized = candidate.string.digitized
+                // 15 = Amex, 16 = Others (Visa, Mastercard, etc.)
                 if digitized.count >= 15 && digitized.count < 17 {
-                    mediumImpactHaptic.impactOccurred()
-                    parent.confidence = candidate.confidence
-                    
                     creditCardTracker.logFrame(strings: [digitized])
                     
-                    if let confidentlyCapturedCreditCard = creditCardTracker.getStableString() {
-                        parent.creditCardNumber = confidentlyCapturedCreditCard
-                        creditCardTracker.reset(string: confidentlyCapturedCreditCard)
-                        isCaptureComplete = true
-                    } else {
-                        isCaptureComplete = false
+                    DispatchQueue.main.async { [weak self] in
+                        self?.mediumImpactHaptic.impactOccurred()
+                        self?.parent.confidence = candidate.confidence
+                        
+                        if let confidentlyCapturedCreditCard = self?.creditCardTracker.getStableString() {
+                            self?.parent.creditCardNumber = confidentlyCapturedCreditCard
+                            self?.creditCardTracker.reset(string: confidentlyCapturedCreditCard)
+                            self?.isCaptureComplete = true
+                        } else {
+                            self?.isCaptureComplete = false
+                        }
                     }
                 }
             }

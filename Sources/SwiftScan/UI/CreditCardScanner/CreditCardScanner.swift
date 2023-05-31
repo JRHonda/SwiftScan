@@ -60,7 +60,6 @@ public struct CreditCardScanner<Content: View>: View {
                     .onChange(of: confidence) { updatedConfidence in
                         cutoutBorderColor = updatedConfidence.borderColor
                     }
-                    .animation(.default, value: confidence)
             }
             .compositingGroup()
             .ignoresSafeArea()
@@ -74,6 +73,7 @@ public struct CreditCardScanner<Content: View>: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .animation(.default, value: cutoutBorderColor)
     }
 }
 
