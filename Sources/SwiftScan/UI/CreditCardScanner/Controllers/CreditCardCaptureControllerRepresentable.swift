@@ -10,6 +10,10 @@ import CoreHaptics
 import SwiftUI
 import Vision
 
+/**
+ TODO: - Add support for different device orientations
+ */
+
 struct CreditCardCaptureControllerRepresentable: UIViewControllerRepresentable {
     @Binding var creditCardNumber: String
     @Binding var confidence: VNConfidence
@@ -58,12 +62,12 @@ struct CreditCardCaptureControllerRepresentable: UIViewControllerRepresentable {
                 let screenWidth = screenBounds.width
                 let screenHeight = screenBounds.height
                 
-                let cutoutYCenter = screenBounds.height * parent.verticalPlacement.value
+                let cutoutYCenter = screenHeight * (1 - parent.verticalPlacement.value)
                 
                 let cutoutWidth = screenWidth * 0.8
-                let cutoutHeight = cutoutWidth / 1.586 // ISO/IEC 7810 credit card aspect ratio
-                let originY = (cutoutYCenter - (cutoutHeight / 2)) / screenHeight
-                let hPadding = 0.16
+                let cutoutHeight = cutoutWidth / (1.586 * 2.0) // helps focus on expected area for card number
+                let originY = (cutoutYCenter - (cutoutHeight / 4)) / screenHeight // helps focus on expected area for card number
+                let hPadding = 0.30
                 
                 request.regionOfInterest = .init(x: hPadding, y: originY, width: 1 - (hPadding * 2), height: cutoutHeight / screenHeight)
                 
