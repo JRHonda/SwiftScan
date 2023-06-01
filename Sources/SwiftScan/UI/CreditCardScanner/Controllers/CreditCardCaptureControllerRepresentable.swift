@@ -67,7 +67,7 @@ struct CreditCardCaptureControllerRepresentable: UIViewControllerRepresentable {
                 let cutoutWidth = screenWidth * 0.8
                 let cutoutHeight = cutoutWidth / (1.586 * 2.0) // helps focus on expected area for card number
                 let originY = (cutoutYCenter - (cutoutHeight / 4)) / screenHeight // helps focus on expected area for card number
-                let hPadding = 0.30
+                let hPadding = 0.27	
                 
                 request.regionOfInterest = .init(x: hPadding, y: originY, width: 1 - (hPadding * 2), height: cutoutHeight / screenHeight)
                 
