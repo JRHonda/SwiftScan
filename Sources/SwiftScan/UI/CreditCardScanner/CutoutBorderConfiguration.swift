@@ -16,6 +16,7 @@ public struct CutoutBorderConfiguration {
     public var lineWidth: CGFloat = 4
     public var cornerDecoration: CornerDecoration = .noDecoration
     public var cornerDecorationColor: Color = .clear
+    public var textDecorationPosition: TextDecorationPosition = .below
     
     public static var roundedWhite: Self {
         .init(cornerRadius: 10, color: .white)
